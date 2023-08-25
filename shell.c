@@ -1,7 +1,9 @@
 #include "shell.h"
 
-void displayPrompt(void) {
-    if (isatty(STDIN_FILENO)) {
+void displayPrompt(void)
+{
+    if (isatty(STDIN_FILENO))
+    {
         printf("Shelly> ");
         fflush(stdout);
     }
@@ -81,7 +83,8 @@ void displayPrompt(void) {
             if (WIFEXITED(childStatus)) {
                 int exitStatus = WEXITSTATUS(childStatus);
                 (void)exitStatus;
-            } else if (WIFSIGNALED(childStatus)) {
+            } else if (WIFSIGNALED(childStatus))
+            {
                 int terminatingSignal = WTERMSIG(childStatus);
                 (void)terminatingSignal;
             }

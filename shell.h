@@ -9,8 +9,8 @@
 #include <sys/wait.h>
 #include <sys/stat.h>
 
-#define MAX_COMMAND_LENGTH 100
-#define MAX_ARGS 20
+#define MAX_COMMAND_LENGTH 1024
+#define MAX_ARGS 128
 
 
 #endif
