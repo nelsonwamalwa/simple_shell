@@ -2,58 +2,57 @@
 
 /**
  * _getline - Wrapper function for the getline function.
- * @line: Pointer to the buffer that will store the line.
+ * @lineptr: Pointer to the buffer that will store the line.
  * @n: Pointer to the size of the buffer.
  * @stream: Pointer to the file stream.
  *
  * Return: The number of characters read, or -1 on failure.
  */
+ssize_t _getline(char **lineptr, size_t *n, FILE *stream) {
+    if (!lineptr || !n || !stream) {
+        errno = EINVAL;
+        return -1;
+    }
 
-ssize_t _getline(char **lineptr, size_t *n, FILE *stream)
-{
-    int c;
-    ssize_t read_chars = 0;
-    size_t buffer_size = *n;
-    char *line = *lineptr;
-
-    if (line == NULL || buffer_size == 0) {
-        buffer_size = 128;
-        line = (char *)malloc(buffer_size);
-        if (line == NULL) {
-            perror("Memory allocation error");
+    if (*lineptr == NULL || *n == 0) {
+        *n = BUFFER_SIZE;
+        *lineptr = (char *)malloc(*n);
+        if (*lineptr == NULL) {
+            errno = ENOMEM;
             return -1;
         }
     }
 
-    while ((c = fgetc(stream)) != EOF) {
-              char *temp;
+    size_t pos = 0;
+    int c;
 
-        if (read_chars >= (ssize_t)(buffer_size - 1)) {
-            buffer_size *= 2;
-            temp = (char *)realloc(line, buffer_size);
-            if (temp == NULL) {
-                perror("Memory allocation error");
-                free(line);
-                return -1;
+    while (1) {
+        c = fgetc(stream);
+        
+        if (c == EOF) {
+            if (pos == 0) {
+                return -1; // No more lines to read
+            } else {
+                (*lineptr)[pos] = '\0';
+                return pos; // Return the length of the line
             }
-            line = temp;
         }
 
-        line[read_chars++] = c;
+        if (pos + 1 >= *n) {
+            *n *= 2;
+            char *new_lineptr = (char *)realloc(*lineptr, *n);
+            if (new_lineptr == NULL) {
+                return -1; // Error
+            }
+            *lineptr = new_lineptr;
+        }
+
+        (*lineptr)[pos] = c;
+        pos++;
 
         if (c == '\n') {
-            break;
+            (*lineptr)[pos] = '\0';
+            return pos; // Return the length of the line
         }
     }
-
-    if (read_chars == 0) {
-        free(line);
-        return -1;
-    }
-
-    line[read_chars] = '\0';
-    *lineptr = line;
-    *n = buffer_size;
-
-    return read_chars;
 }
