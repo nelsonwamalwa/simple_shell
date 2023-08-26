@@ -82,12 +82,10 @@ int main(void)
 	while (1)
 	{
 		ssize_t bytesRead;
-		pid_t childPid;
-		char *args[MAX_ARGS];
+		/* pid_t childPid;*/
+		/* char *args[MAX_ARGS];*/
 
-		int argCount = 0;
-		char *token;
-
+		/*char token and the other one*/
 		displayPrompt();
 		bytesRead = getCommand(&command, &commandSize);
 		if (bytesRead == -1)
@@ -102,26 +100,9 @@ int main(void)
 		{
 			command[bytesRead - 1] = '\0';
 		}
-		token = strtok(command, " ");
-		while (token != NULL && argCount < MAX_ARGS - 1)
-		{
-			args[argCount++] = token;
-			token = strtok(NULL, " ");
-		}
-		args[argCount] = NULL;
-		childPid = fork();
-		if (childPid < 0)
-		{
-			perror("Fork error");
-		}
-		else if (childPid == 0)
-		{
-			executeCommand(args);
-		}
-		else
-		{
-			waitForChildProcess(childPid);
-		}
+		/* token = strtok(command, " ");*/
+		/*delete one line below*/
+		/**here*/
 	}
 	free(command);
 
