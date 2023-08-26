@@ -12,7 +12,5 @@
 #define MAX_COMMAND_LENGTH 1024
 #define MAX_ARGS 128
 
-ssize_t _getline(char **lineptr, size_t *n, FILE *stream);
-
 
 #endif
