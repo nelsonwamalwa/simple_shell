@@ -124,5 +124,6 @@ int main(void)
 		}
 	}
 	free(command);
+
 	return (0);
 }
