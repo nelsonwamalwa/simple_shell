@@ -1,5 +1,11 @@
 #include "shell.h"
 
+/**
+ * displayPrompt - Displays the shell prompt "Shelly> " if input is from a term
+ *inal
+ * None
+ * Return: None
+ */
 void displayPrompt(void)
 {
 	if (isatty(STDIN_FILENO))
@@ -8,11 +14,26 @@ void displayPrompt(void)
 		fflush(stdout);
 	}
 }
+
+/**
+ * getCommand - Reads a line from standard input into the provided buffer.
+ *
+ * @command: Pointer to the buffer where the command will be stored.
+ * @commandSize: Pointer to the size of the command buffer.
+ * Return: The number of characters read, or -1 on failure.
+ */
 ssize_t getCommand(char **command, size_t *commandSize)
 {
 	return (getline(command, commandSize, stdin));
 }
 
+/**
+ * executeCommand - Executes a command using the execvp system call.
+ *
+ * @args: Null-terminated array of command arguments.
+ * Return: This function does not return on success, or exits with an error mes
+ * sage on failure.
+ */
 void executeCommand(char **args)
 {
 	execvp(args[0], args);
@@ -20,6 +41,12 @@ void executeCommand(char **args)
 	exit(EXIT_FAILURE);
 }
 
+/**
+ * waitForChildProcess - Waits for a child process to complete.
+ *
+ * @childPid: The process ID of the child process to wait for.
+ * Return: None
+ */
 void waitForChildProcess(pid_t childPid)
 {
 	int childStatus;
@@ -31,6 +58,22 @@ void waitForChildProcess(pid_t childPid)
 	}
 }
 
+/**
+ * main - Entry point of the program.
+ *
+ * This is the main function where the program's execution begins. It serves as
+ * the
+ * entry point for the program's logic and control flow. Within this function,
+ * you can
+ * call other functions, perform initialization, and manage the overall executi
+ * on of
+ * the program.
+ *
+ * @void: This function accepts no arguments.
+ * Return: The exit status of the program. Typically, 0 indicates successful
+ * execution,and non-zero values are used to indicate errors or
+ * abnormal termination.
+ */
 int main(void)
 {
 	char *command = NULL;
@@ -41,6 +84,7 @@ int main(void)
 		ssize_t bytesRead;
 		pid_t childPid;
 		char *args[MAX_ARGS];
+
 		int argCount = 0;
 		char *token;
 
